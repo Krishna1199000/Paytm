@@ -7,6 +7,7 @@ const accountRoutes = require("./routes/accountRoutes");
 app.use(
   cors({
     origin: "https://paytm-wybp.vercel.app",
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   })
 );
