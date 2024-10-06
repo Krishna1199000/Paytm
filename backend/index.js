@@ -6,7 +6,7 @@ const accountRoutes = require("./routes/accountRoutes");
 
 app.use(
   cors({
-    origin: "https://paytm-hq78.vercel.app",
+    origin: "https://paytm-4s7w.vercel.app",
     credentials: true,
   })
 );
