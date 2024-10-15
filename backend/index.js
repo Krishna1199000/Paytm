@@ -6,7 +6,7 @@ const accountRoutes = require("./routes/accountRoutes");
 
 app.use(
   cors({
-    origin: "",
+    origin: "https://paytm-7jpk.onrender.com",
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   })
