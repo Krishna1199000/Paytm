@@ -21,6 +21,12 @@ dbConnect();
 // Routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/account", accountRoutes);
+app.use(express.static(path.join(__dirname, 'public')));
+
+// For Single Page Applications
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "Your server is up and running..." });
