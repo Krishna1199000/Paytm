@@ -6,13 +6,14 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: 'http://localhost:5173', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  
+  credentials: true, 
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 require("dotenv").config();
@@ -23,16 +24,18 @@ dbConnect();
 // Routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/account", accountRoutes);
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // For Single Page Applications
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 app.get("/", (req, res) => {
   res.json({ message: "Your server is up and running..." });
 });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
