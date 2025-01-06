@@ -1,6 +1,5 @@
 const express = require("express");
-const path = require('path');
-
+const bodyParser = require('body-parser');
 const app = express();
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
@@ -15,7 +14,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(express.json());
+app.use(bodyParser.json())
+
 require("dotenv").config();
 
 const dbConnect = require("./config/db");
@@ -29,21 +29,16 @@ app.use("/api/v1/account", accountRoutes);
 // For Single Page Applications
 
 app.get("/", (req, res) => {
-  res.json({ message: "Your server is up and running..." });
+  res.send("Welcome to the API!");
 });
-
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname+'/build/index.html'));
 });
 
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong", error: err.message });
-});
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
