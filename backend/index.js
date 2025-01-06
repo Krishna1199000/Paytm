@@ -24,7 +24,7 @@ dbConnect();
 // Routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/account", accountRoutes);
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // For Single Page Applications
 
