@@ -1,49 +1,49 @@
 const express = require("express");
-const path = require('path');
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
-const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 
-const corsOptions = {
-  origin: 'http://localhost:5173', 
+// CORS configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  
-  credentials: true, 
-};
-
-app.use(cors(corsOptions));
+  credentials: true,
+}));
 
 app.use(express.json());
-require("dotenv").config();
 
+// Database connection
 const dbConnect = require("./config/db");
-dbConnect();
+dbConnect().catch(console.error);  // Handle connection errors
 
 // Routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/account", accountRoutes);
-// app.use(express.static(path.join(__dirname, 'public')));
 
-// For Single Page Applications
-
-app.get("/", (req, res) => {
-  res.json({ message: "Your server is up and running..." });
+// Basic health check route
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-
+// Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong", error: err.message });
+  console.error(err);
+  res.status(500).json({ 
+    message: "Internal server error",
+    error: process.env.NODE_ENV === 'production' ? null : err.message
+  });
 });
 
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
+// Export for Vercel
+module.exports = app;
