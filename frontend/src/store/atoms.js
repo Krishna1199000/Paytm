@@ -1,9 +1,8 @@
 import {atom} from 'recoil';
 
 export const tokenAtom = atom({
-  key:"tokenAtom",
-  default: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")): null,
-
+  key: "tokenAtom",
+  default: localStorage.getItem("token") || null, 
 });
 
 export const userAtom = atom({
